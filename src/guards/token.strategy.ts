@@ -1,4 +1,4 @@
-import { SECRET_SIGN } from './configToken';
+import * as config from '../config.json';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
@@ -10,7 +10,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'token') {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: true,
-      secretOrKey: SECRET_SIGN,
+      secretOrKey: config.token.SECRET_SIGN,
     });
   }
 
