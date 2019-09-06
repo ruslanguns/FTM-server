@@ -18,7 +18,12 @@ import {
   checkProfileId,
   checkBasicEditProfile,
 } from '../../validation/validations';
-import { Profile, TokenModel } from '../../database/interfaces';
+import {
+  Profile,
+  TokenModel,
+  Basic,
+  BasicEditProfile,
+} from '../../database/interfaces';
 import { EditProfilePipe } from '../../validation/validationEditProfile.pipe';
 
 @Controller()
@@ -70,7 +75,23 @@ export class ProfileController {
     @Request() req: any,
     @Body() bodyData: checkBasicEditProfile,
   ) {
-    return bodyData;
+    const field = bodyData.edits[0].field as
+      | 'name'
+      | 'sexe'
+      | 'age'
+      | 'birthday';
+    const modification: Basic = {
+      field: field,
+      [field]: bodyData.edits[0][field],
+    };
+
+    const edit: BasicEditProfile = {
+      kind: 'basic',
+      profileId: bodyData.profileId,
+      modification: modification,
+    };
+
+    await this.profilsService.editProfile(req.user.familyAccountId, edit);
   }
 
   @UseGuards(AuthGuard('token'))
