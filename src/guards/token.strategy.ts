@@ -3,10 +3,13 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { TokenModel } from '../database/interfaces';
+import { FamilyAccountService } from '../auth/familyAccount/familyAccount.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'token') {
-  constructor() {
+  constructor(
+    private readonly familyAccountService: FamilyAccountService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: true,
@@ -15,6 +18,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'token') {
   }
 
   async validate(tokenInfo: TokenModel) {
+    // store the output result.. 
+    // const output = await this.familyAccountService.existFamilyAccount(/** USER ID */); // <<------|
     return tokenInfo as TokenModel;
   }
 }

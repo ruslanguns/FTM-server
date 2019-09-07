@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 
 @Injectable()
 export class FamilyAccountService {
-  constructor(private readonly pass: Pass) {}
+  constructor(private readonly pass: Pass) { }
   async register(
     newFamilyAccount: FamilyAccount,
   ): Promise<MongoError | FamilyAccount> {
@@ -48,5 +48,11 @@ export class FamilyAccountService {
         return token;
       }
     }
+  }
+
+  async existFamilyAccount(familyAccountId: any): Promise<boolean> {
+    const checkExist = await FamilyAccountModel.findById(familyAccountId);
+    if (!checkExist) return false;
+    return true;
   }
 }
