@@ -32,6 +32,7 @@ export class ProfileService {
       familyAccountId,
       { profiles: 1, _id: 0 },
     )).profiles;
+    profiles.forEach(profile => delete profile.password);
 
     return profiles;
   }
@@ -55,7 +56,7 @@ export class ProfileService {
       {
         $pull: { profiles: { id: profileId } },
       },
-    );
+    ).exec();
 
     // TODO fix this
     if (!profileDeleted) {
@@ -63,13 +64,26 @@ export class ProfileService {
     }
   }
 
-  async modifyProfile(
+  async editProfile(
     familyAccountId: string,
     modificationType: ModificationType,
   ) {
     const profileModification: ModificationType = modificationType;
     switch (profileModification.kind) {
       case 'basic':
+        const field: string = profileModification.modification.field;
+        await FamilyAccountModel.findOneAndUpdate(
+          {
+            _id: familyAccountId,
+          },
+          {
+            $set: {
+              //prettier-ignore
+              [`profiles.$[elem].${field}`]: profileModification.modification[field]
+            },
+          },
+          { arrayFilters: [{ 'elem.id': profileModification.profileId }] },
+        ).exec();
         break;
       case 'admin':
         console.log('admin');
@@ -79,7 +93,5 @@ export class ProfileService {
         console.log('task');
         break;
     }
-
-    // const profileModified = await FamilyAccountModel.findByIdAndUpdate();
   }
 }

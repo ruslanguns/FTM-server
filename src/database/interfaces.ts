@@ -59,18 +59,18 @@ export interface AssignTasks {}
 
 export interface BasicEditProfile {
   readonly kind: 'basic';
-  readonly id: string;
-  readonly modification: Array<Basic>;
+  readonly profileId: string;
+  readonly modification: Basic;
 }
 export interface AdminEditProfile {
   readonly kind: 'admin';
-  readonly id: string;
-  readonly modification: Array<Admin>;
+  readonly profileId: string;
+  readonly modification: Admin;
 }
 export interface TaskEditProfile {
   readonly kind: 'assignTasks';
-  readonly id: string;
-  readonly modification: Array<AssignTasks>;
+  readonly profileId: string;
+  readonly modification: AssignTasks;
 }
 
 export type ModificationType =

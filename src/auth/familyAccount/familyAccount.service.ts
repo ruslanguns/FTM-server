@@ -5,17 +5,18 @@ import {
   MongoError,
   FamilyAccount,
 } from '../../database/interfaces';
-import { SECRET_SIGN } from '../../guards/configToken';
+import * as config from '../../config.json';
+import { Pass } from '../../private/hash';
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 
 @Injectable()
 export class FamilyAccountService {
+  constructor(private readonly pass: Pass) {}
   async register(
     newFamilyAccount: FamilyAccount,
   ): Promise<MongoError | FamilyAccount> {
     // Account object
-    newFamilyAccount.password = await bcrypt.hash(newFamilyAccount.password, 5);
+    newFamilyAccount.password = await this.pass.hash(newFamilyAccount.password);
 
     // Create family account
     try {
@@ -35,13 +36,13 @@ export class FamilyAccountService {
     if (!data) {
       throw new HttpException('Email not found', 404);
     } else {
-      const checkPassword = await bcrypt.compare(password, data.password);
+      const checkPassword = await this.pass.verify(data.password, password);
       if (!checkPassword) {
         throw new HttpException('Wrong password', 400);
       } else {
         const token: string = await jwt.sign(
           { familyAccountId: data.id, currentProfile: null, isAdmin: null },
-          SECRET_SIGN,
+          config.token.SECRET_SIGN,
           { expiresIn: '1d' },
         );
         return token;

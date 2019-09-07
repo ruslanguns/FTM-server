@@ -6,6 +6,7 @@
 # confidential
 /src/config.json
 test.ts
+/src/private
 
 # Logs
 logs

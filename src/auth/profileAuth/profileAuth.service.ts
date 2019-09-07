@@ -5,15 +5,18 @@ import {
   ApiError,
   TokenModel,
 } from '../../database/interfaces';
-import { SECRET_SIGN } from '../../guards/configToken';
+import * as config from '../../config.json';
 import { ProfileService } from '../../familyAccount/profiles/profile.service';
+import { Pass } from '../../private/hash';
 
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 
 @Injectable()
 export class ProfileAuthService {
-  constructor(private readonly profileService: ProfileService) {}
+  constructor(
+    private readonly profileService: ProfileService,
+    private readonly pass: Pass,
+  ) {}
 
   async loginToProfileWithPassword(
     familyAccountId: string,
@@ -26,11 +29,14 @@ export class ProfileAuthService {
         currentProfile: profileData.id,
         isAdmin: profileData.isAdmin,
       },
-      SECRET_SIGN,
+      config.token.SECRET_SIGN,
       { expiresIn: '1d' },
     );
 
-    const checkPassword = await bcrypt.compare(password, profileData.password);
+    const checkPassword = await this.pass.verify(
+      profileData.password,
+      password,
+    );
 
     if (checkPassword) {
       return { token: token };
@@ -48,7 +54,7 @@ export class ProfileAuthService {
         currentProfile: profileData.id,
         isAdmin: profileData.isAdmin,
       },
-      SECRET_SIGN,
+      config.token.SECRET_SIGN,
       { expiresIn: '1d' },
     );
     return { token: token };
