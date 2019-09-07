@@ -14,9 +14,9 @@ import {
 import { ProfileService } from './profile.service';
 import { AuthGuard } from '@nestjs/passport';
 import {
-  checkNewProfile,
-  checkProfileId,
-  checkBasicEditProfile,
+  CheckNewProfile,
+  CheckProfileId,
+  CheckBasicEditProfile,
 } from '../../validation/validations';
 import {
   Profile,
@@ -33,7 +33,7 @@ export class ProfileController {
   @UseGuards(AuthGuard('access'))
   @UsePipes()
   @Post('new')
-  async createProfil(@Body() bodyData: checkNewProfile, @Request() req: any) {
+  async createProfil(@Body() bodyData: CheckNewProfile, @Request() req: any) {
     // Variables
     const familyAccountId = req.user.familyAccountId;
     // prettier-ignore
@@ -59,7 +59,7 @@ export class ProfileController {
   @UseGuards(AuthGuard('access'))
   @UsePipes()
   @Delete('delete')
-  async deleteProfile(@Request() req: any, @Body() bodyData: checkProfileId) {
+  async deleteProfile(@Request() req: any, @Body() bodyData: CheckProfileId) {
     const tokenData: TokenModel = req.user;
     await this.profilsService.deleteProfile(
       tokenData.familyAccountId,
@@ -73,7 +73,7 @@ export class ProfileController {
   @Put('basicEdits')
   async basicEditProfile(
     @Request() req: any,
-    @Body() bodyData: checkBasicEditProfile,
+    @Body() bodyData: CheckBasicEditProfile,
   ) {
     const field = bodyData.edits[0].field as
       | 'name'

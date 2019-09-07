@@ -48,7 +48,7 @@ class Profile {
   readonly birthday: Date;
 }
 
-export class checkNewProfile {
+export class CheckNewProfile {
   @Type(() => Profile)
   @IsNotEmpty()
   @ApiModelProperty()
@@ -58,7 +58,7 @@ export class checkNewProfile {
 
 // ---- CHECK PROFILE ID ---
 
-export class checkProfileId {
+export class CheckProfileId {
   @ApiModelProperty()
   @IsString()
   readonly profileId: string;
@@ -66,7 +66,7 @@ export class checkProfileId {
 
 // ---- CHECK PROFILE LOGIN ----
 
-export class checkProfileLogin extends checkProfileId {
+export class CheckProfileLogin extends CheckProfileId {
   @ApiModelProperty()
   @IsOptional()
   @IsString()
@@ -103,7 +103,7 @@ class BasicEditProfile {
   readonly birthday: string;
 }
 
-export class checkBasicEditProfile extends checkProfileId {
+export class CheckBasicEditProfile extends CheckProfileId {
   @Type(() => BasicEditProfile)
   @IsNotEmpty()
   @ApiModelProperty()
@@ -112,7 +112,7 @@ export class checkBasicEditProfile extends checkProfileId {
 }
 
 // check admin edits
-export class checkAdminEditProfile extends checkProfileId {
+export class CheckAdminEditProfile extends CheckProfileId {
   @ApiModelProperty()
   @IsOptional()
   @IsBoolean()
@@ -147,7 +147,7 @@ class FamilyAccountRegister {
   readonly confirmPassword: string;
 }
 
-export class checkFamilyAccountRegister {
+export class CheckFamilyAccountRegister {
   @Type(() => FamilyAccountRegister)
   @IsNotEmpty()
   @ApiModelProperty()
@@ -161,7 +161,7 @@ export class checkFamilyAccountRegister {
 
 // ---- CHECK FAMILY ACCOUNT LOGIN -----
 
-export class checkFamilyAccountLogin {
+export class CheckFamilyAccountLogin {
   @ApiModelProperty()
   @IsEmail()
   readonly email: string;

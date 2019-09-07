@@ -12,7 +12,7 @@ import { ProfileAuthService } from './profileAuth.service';
 import { TokenModel, Profile } from '../../database/interfaces';
 import { AuthGuard } from '@nestjs/passport';
 import { ProfileService } from '../../familyAccount/profiles/profile.service';
-import { checkProfileLogin } from '../../validation/validations';
+import { CheckProfileLogin } from '../../validation/validations';
 
 @Controller()
 export class ProfileAuthController {
@@ -23,7 +23,7 @@ export class ProfileAuthController {
 
   @UseGuards(AuthGuard('token'))
   @Post('login')
-  async login(@Request() req: any, @Body() bodyData: checkProfileLogin) {
+  async login(@Request() req: any, @Body() bodyData: CheckProfileLogin) {
     const familyAccountId: string = req.user.familyAccountId;
     const profileData: Profile = await this.profileService.getOneProfile(
       familyAccountId,

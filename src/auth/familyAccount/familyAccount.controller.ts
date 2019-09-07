@@ -11,8 +11,8 @@ import {
 import { FamilyAccountService } from './familyAccount.service';
 import { FamilyAccount, Profile } from '../../database/interfaces';
 import {
-  checkFamilyAccountRegister,
-  checkFamilyAccountLogin,
+  CheckFamilyAccountRegister,
+  CheckFamilyAccountLogin,
 } from '../../validation/validations';
 const bcrypt = require('bcrypt');
 
@@ -22,7 +22,7 @@ export class FamilyAccountController {
 
   @Post('register')
   @UsePipes()
-  async register(@Body() bodyData: checkFamilyAccountRegister) {
+  async register(@Body() bodyData: CheckFamilyAccountRegister) {
     // check passwords
     if (
       bodyData.newFamilyAccount.password !==
@@ -53,7 +53,7 @@ export class FamilyAccountController {
 
   @Post('login')
   @UsePipes()
-  async login(@Body() bodyData: checkFamilyAccountLogin) {
+  async login(@Body() bodyData: CheckFamilyAccountLogin) {
     const token: string = await this.familyAccountService.login(
       bodyData.email,
       bodyData.password,
